@@ -1,9 +1,12 @@
 package com.ucc.product.controller;
 
 import com.ucc.product.model.Product;
+import com.ucc.product.model.dto.ProductDTO;
+import com.ucc.product.model.dto.ProductInfoDTO;
 import com.ucc.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,33 +19,45 @@ import java.util.Optional;
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping
+    @GetMapping("/products")
     @ResponseStatus(HttpStatus.OK)
     public List<Product> getProducts(){
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/products/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Product getProductByID(@PathVariable Long id){
         return productService.getProductByID(id);
     }
 
-    @PostMapping
+    @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
     public void addProduct(@RequestBody Product product){
         this.productService.createProduct(product);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/products/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
         this.productService.deleteProductByID(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/products/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void editProductByID(@RequestBody Product product, @PathVariable Long id){
         this.productService.editProductByID(product, id);
+    }
+    // *******************************************************
+    @GetMapping("/infoDTO")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductInfoDTO> getProductsDTO(){
+        return productService.getAllInfoProducts();
+    }
+
+    @PostMapping("/DTO")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object>newProducts (@RequestBody ProductDTO product){
+        return productService.newProduct(product);
     }
 }

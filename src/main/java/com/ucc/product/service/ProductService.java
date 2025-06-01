@@ -1,12 +1,17 @@
 package com.ucc.product.service;
 
 import com.ucc.product.model.Product;
+import com.ucc.product.model.dto.ProductDTO;
+import com.ucc.product.model.dto.ProductInfoDTO;
 import com.ucc.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +52,21 @@ public class ProductService {
         existProduct.setPrice(product.getPrice());
 
         productRepository.save(existProduct);
+    }
+
+    public List<ProductInfoDTO> getAllInfoProducts(){
+        return productRepository.findAll()
+                .stream()
+                .map(productEntity -> new ProductInfoDTO(productEntity.getId(), productEntity.getName()))
+                .collect(Collectors.toList());
+    }
+
+    public ResponseEntity<Object> newProduct(ProductDTO productDTO){
+        Product productEntity = new Product();
+        productEntity.setName(productDTO.getName());
+        productEntity.setPrice(productDTO.getPrice());
+        productEntity.setStatus(Boolean.TRUE);
+        productRepository.save(productEntity);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
