@@ -47,7 +47,7 @@ public class ProductController {
     public void editProductByID(@RequestBody Product product, @PathVariable Long id){
         this.productService.editProductByID(product, id);
     }
-    // *******************************************************
+    // ********************* DTO **********************************
     @GetMapping("/infoDTO")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductInfoDTO> getProductsDTO(){
@@ -58,5 +58,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object>newProducts (@RequestBody ProductDTO product){
         return productService.newProduct(product);
+    }
+    // ************* QUERY *****************
+    @GetMapping("/products/price")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Product> getProductPrice(){
+        return productService.getProductByPriceDesc();
     }
 }

@@ -79,4 +79,8 @@ public class ProductService {
         productRepository.save(productEntity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    public List<Product> getProductByPriceDesc(){
+        return productRepository.findAllOrderByPriceDesc();
+    }
 }
