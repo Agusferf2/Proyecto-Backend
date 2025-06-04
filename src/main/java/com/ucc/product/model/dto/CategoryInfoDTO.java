@@ -1,6 +1,5 @@
 package com.ucc.product.model.dto;
 
-import com.ucc.product.model.entities.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,11 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 
-public class ProductDTO implements Serializable{
+public class CategoryInfoDTO implements Serializable {
     private String name;
-    private Double price;
-    private CategoryDTO categoryDTO;
+    private boolean status;
+
 }

@@ -1,6 +1,6 @@
 package com.ucc.product.controller;
 
-import com.ucc.product.model.Product;
+import com.ucc.product.model.entities.Product;
 import com.ucc.product.model.dto.ProductDTO;
 import com.ucc.product.model.dto.ProductInfoDTO;
 import com.ucc.product.service.ProductService;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")

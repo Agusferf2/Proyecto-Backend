@@ -1,8 +1,9 @@
 package com.ucc.product.service;
 
-import com.ucc.product.model.Product;
+import com.ucc.product.model.entities.Product;
 import com.ucc.product.model.dto.ProductDTO;
 import com.ucc.product.model.dto.ProductInfoDTO;
+import com.ucc.product.model.mappers.ProductsMappers;
 import com.ucc.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductsMappers productsMappers;
 
     //Metodo que obtenga todos los productos guardados
     public List<Product> getAllProducts(){
@@ -57,15 +58,24 @@ public class ProductService {
     public List<ProductInfoDTO> getAllInfoProducts(){
         return productRepository.findAll()
                 .stream()
-                .map(productEntity -> new ProductInfoDTO(productEntity.getId(), productEntity.getName()))
+                .map(productEntity -> new ProductInfoDTO(productEntity.getId(), productEntity.getName(), productEntity.getCategory()))
                 .collect(Collectors.toList());
     }
 
+    //Metodo sin mapper
+//    public ResponseEntity<Object> newProduct(ProductDTO productDTO){
+//        Product productEntity = new Product();
+//        productEntity.setName(productDTO.getName());
+//        productEntity.setPrice(productDTO.getPrice());
+//        productEntity.setStatus(Boolean.TRUE);
+//        productRepository.save(productEntity);
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+
+
+    //Metodo con mapper
     public ResponseEntity<Object> newProduct(ProductDTO productDTO){
-        Product productEntity = new Product();
-        productEntity.setName(productDTO.getName());
-        productEntity.setPrice(productDTO.getPrice());
-        productEntity.setStatus(Boolean.TRUE);
+        Product productEntity = productsMappers.productsDTOtoProductsEntity(productDTO);
         productRepository.save(productEntity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
