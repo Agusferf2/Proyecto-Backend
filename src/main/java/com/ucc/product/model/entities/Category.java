@@ -1,6 +1,8 @@
 package com.ucc.product.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +27,10 @@ public class Category {
 
     private  Boolean status;
 
-    //UNA CATEGORIA CON MUCHOS PRODUCTOS
-//    @OneToMany(mappedBy = "category")
-//    @JsonManagedReference
-//    private List<Product> products;
+    @OneToMany(mappedBy = "category",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true,
+    fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Product> products;
 }

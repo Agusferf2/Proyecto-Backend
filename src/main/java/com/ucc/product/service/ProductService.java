@@ -1,5 +1,6 @@
 package com.ucc.product.service;
 
+import com.ucc.product.exceptions.Product.ProductNotExistException;
 import com.ucc.product.model.entities.Product;
 import com.ucc.product.model.dto.ProductDTO;
 import com.ucc.product.model.dto.ProductInfoDTO;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,28 +22,33 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductsMappers productsMappers;
 
-    //Metodo que obtenga todos los productos guardados
+    // ********************* PRODUCTS **********************************
+    //OBTENER TODOS LOS PRODUCTOS
     public List<Product> getAllProducts(){
         return productRepository.findAll();
     }
 
-    //Metodo que obtenga el producto por id
-    public Product getProductByID(Long id){
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    //OBTENER PRODUCTOS POR ID
+    public Product getProductById(Long id){
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isEmpty()){
+            throw new ProductNotExistException("No se encontro el producto" + id);
+        }else {
+            return productOptional.get();
+        }
     }
 
-    //Metodo que crea un producto
+    //CREAR PRODUCTO
     public void createProduct(Product product){
         productRepository.save(product);
     }
 
-    //Metodo para eliminar producto
+    //BORRAR PRODUCTO
     public void deleteProductByID(Long id){
         productRepository.deleteById(id);
     }
 
-    //Metodo para editar producto
+    //MODIFICAR PRODUCTO POR ID
     public void editProductByID(Product product, Long id){
         Product existProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
@@ -55,6 +62,8 @@ public class ProductService {
         productRepository.save(existProduct);
     }
 
+    // ********************* DTO **********************************
+    //OBTENER EL DTO DE PRODUCTO (SOLO ID, NOMBRE Y CATEGORIA)
     public List<ProductInfoDTO> getAllInfoProducts(){
         return productRepository.findAll()
                 .stream()
@@ -62,7 +71,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    //Metodo sin mapper
+    //CARGAR EL DTO SIN MAPPER
 //    public ResponseEntity<Object> newProduct(ProductDTO productDTO){
 //        Product productEntity = new Product();
 //        productEntity.setName(productDTO.getName());
@@ -73,14 +82,17 @@ public class ProductService {
 //    }
 
 
-    //Metodo con mapper
+    //CARGAR EL DTO DE PRODUCTO
     public ResponseEntity<Object> newProduct(ProductDTO productDTO){
         Product productEntity = productsMappers.productsDTOtoProductsEntity(productDTO);
         productRepository.save(productEntity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    // ********************* QUERY **********************************
+    //OBTENER LOS PRODUCTOS ORDENADOS POR PRECIO DESCENDIENTE
     public List<Product> getProductByPriceDesc(){
         return productRepository.findAllOrderByPriceDesc();
     }
+
 }

@@ -22,6 +22,8 @@ public class ProductsMappers {
         productEntity.setCategory(categoryEntity);
         return productEntity;
     }
+
+
     public ProductDTO productEntityToProductDTO(Product productEntity){
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName(productEntity.getName());

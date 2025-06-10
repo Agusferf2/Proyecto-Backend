@@ -23,16 +23,9 @@ public class Product {
     private Integer stock;
     private Boolean status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonBackReference
     @JoinColumn(name = "category_id")
+
     private Category category;
-//    public Product(Boolean status, Integer stock, String description, Double price, String name, Long id) {
-//        this.status = status;
-//        this.stock = stock;
-//        this.description = description;
-//        this.price = price;
-//        this.name = name;
-//        this.id = id;
-//    }
 }
